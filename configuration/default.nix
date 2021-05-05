@@ -1,6 +1,6 @@
 { home, inputs, nixpkgs, ... }:
 let
-  config = import ../config;
+  config = import ../config { pkgs = nixpkgs; };
 in
 nixpkgs.lib.nixosSystem rec {
   system = "x86_64-linux";

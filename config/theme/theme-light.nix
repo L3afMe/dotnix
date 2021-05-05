@@ -1,6 +1,6 @@
 rec {
   # Main
-  foreground ={
+  foreground = {
     normal =  "575279";
     alt = "232136";
   };
@@ -42,26 +42,4 @@ rec {
     normal =  "F2E9DE";
     bright = "FAF4ED";
   };
-
-  colors16 = [
-    # Normal
-    background.normal
-    red.normal
-    green.normal
-    yellow.normal
-    blue.normal
-    magenta.normal
-    cyan.normal
-    foreground.normal
-
-    # Bright
-    background.alt
-    red.bright
-    green.bright
-    yellow.bright
-    blue.bright
-    magenta.bright
-    cyan.bright
-    foreground.alt
-  ];
 }

@@ -1,104 +1,105 @@
 { config, pkgs, ... }:
-
+let
+  conf = import ../../../config { inherit pkgs; };
+in
 {
   config = {
-    home.packages = with pkgs; [ kitty ];
-
     home.file.".config/kitty/kitty.conf".text = ''
-include rose-pine-dawn.conf
+include nix-theme.conf
 
-font_family       FiraCode Nerd Font Mono 
-italic_font       auto
-bold_font         auto
-bold_italic_font  auto
-font_features     FiraCode-Regular +ss01 +ss03 +ss04 +ss05 +ss07 +ss08 +zero
+font_family               ${conf.theme.kitty.font.family}
+bold_font                 ${conf.theme.kitty.font.bold}
+italic_font               ${conf.theme.kitty.font.italic}
+bold_italic_font          ${conf.theme.kitty.font.bold_italic}
+font_features             ${conf.theme.kitty.font.features}
 
-font_size        11.0
-font_size_delta  2
+font_size                 ${conf.theme.kitty.font.size.size}
+font_size_delta           ${conf.theme.kitty.font.size.delta}
 
-cursor_shape              beam
+cursor_shape              ${conf.theme.kitty.cursor}
 enable_audio_bell         no
 focus_follows_mouse       no
 scrollback_lines          10000
 scrollback_in_new_tab     no
 select_by_word_characters :@-./_~?&=%+#"'
-window_padding_width 15
+window_padding_width      ${conf.theme.padding}
 
-open_url_modifiers ctrl+shift
-open_url_with      default
+open_url_modifiers        ctrl+shift
+open_url_with             ${conf.browser}
 
-map ctrl+shift+v paste_from_clipboard
-map ctrl+shift+c copy_to_clipboard
+map ctrl+shift+v          paste_from_clipboard
+map ctrl+shift+c          copy_to_clipboard
 
-map ctrl+shift+k    scroll_line_up
-map ctrl+shift+j    scroll_line_down
+map ctrl+shift+k          scroll_line_up
+map ctrl+shift+j          scroll_line_down
 
-map ctrl+shift+enter new_window
-map ctrl+shift+w     close_window
-map ctrl+shift+]     next_window
-map ctrl+shift+[     previous_window
+map ctrl+shift+enter      new_window
+map ctrl+shift+w          close_window
+map ctrl+shift+]          next_window
+map ctrl+shift+[          previous_window
 
-map ctrl+shift+l next_tab
-map ctrl+shift+h previous_tab
-map ctrl+shift+t new_tab
-map ctrl+shift+q close_tab
-map ctrl+shift+. move_tab_forward
-map ctrl+shift+, move_tab_backward
+map ctrl+shift+l          next_tab
+map ctrl+shift+h          previous_tab
+map ctrl+shift+t          new_tab
+map ctrl+shift+q          close_tab
+map ctrl+shift+.          move_tab_forward
+map ctrl+shift+,          move_tab_backward
 
-map ctrl+shift+equal     increase_font_size
-map ctrl+shift+minus     decrease_font_size
-map ctrl+shift+backspace restore_font_size
-    '';
+map ctrl+shift+equal      increase_font_size
+map ctrl+shift+minus      decrease_font_size
+map ctrl+shift+backspace  restore_font_size
 
-    home.file.".config/kitty/rose-pine-dawn.conf".text = ''
+    '' + conf.kitty.extraConfig;
+
+    home.file.".config/kitty/nix-theme.conf".text = ''
 # Main colors
-foreground              #575279
-background              #F5E9DA
-selection_foreground    #F5E9DA
-selection_background    #575279
-url_color               #F5E9DA
+foreground              #${conf.theme.colors.foreground.normal}
+background              #${conf.theme.colors.background.normal}
+selection_foreground    #${conf.theme.colors.background.normal}
+selection_background    #${conf.theme.colors.foreground.normal}
+url_color               #${conf.theme.colors.red.normal}
 
 # Cursor colors
-cursor                  #232136
-cursor_text_color       #F5E9DA
+cursor                  #${conf.theme.colors.foreground.normal}
+cursor_text_color       #${conf.theme.colors.background.normal}
 
 # Tab bar colors
-active_tab_foreground   #F5E9DA
-active_tab_background   #575279
-inactive_tab_foreground #575279
-inactive_tab_background #F5E9DA
+active_tab_foreground   #${conf.theme.colors.background.normal}
+active_tab_background   #${conf.theme.colors.foreground.normal}
+inactive_tab_foreground #${conf.theme.colors.foreground.normal}
+inactive_tab_background #${conf.theme.colors.background.normal}
 
 # Black
-color0  #232136
-color8  #575279
+color0  #${conf.theme.colors.black.normal}
+color8  #${conf.theme.colors.black.bright}
 
 # Red
-color1  #B4637A
-color9  #D7827E
+color1  #${conf.theme.colors.red.normal}
+color9  #${conf.theme.colors.red.bright}
 
 # Yellow
-color3  #EA9D34
-color11 #F6C177
+color3  #${conf.theme.colors.yellow.normal}
+color11 #${conf.theme.colors.yellow.bright}
 
 # Magenta
-color5  #907AA9
-color13 #C4A7E7
+color5  #${conf.theme.colors.magenta.normal}
+color13 #${conf.theme.colors.magenta.bright}
 
 # Blue
-color4  #286983
-color12 #CECAED
+color4  #${conf.theme.colors.blue.normal}
+color12 #${conf.theme.colors.blue.bright}
 
 # Cyan
-color6  #56959F
-color14 #9CCFD8
+color6  #${conf.theme.colors.cyan.normal}
+color14 #${conf.theme.colors.cyan.bright}
 
 # Green
-color2  #569F84
-color10 #9CD8C3
+color2  #${conf.theme.colors.green.normal}
+color10 #${conf.theme.colors.green.bright}
 
 # White
-color7  #F2E9DE
-color15 #FAF4ED
+color7  #${conf.theme.colors.white.normal}
+color15 #${conf.theme.colors.white.bright}
      '';
   };
 }

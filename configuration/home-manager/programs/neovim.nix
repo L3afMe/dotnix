@@ -27,15 +27,11 @@ let
       sha256 = "0bfkcfjqg2jqm4ss16ks1mfnlnpyg1l4l18g7pagw1dfka14y8fg";
     };
   };
-  rps-nvim = pkgs.vimUtils.buildVimPlugin {
-    name = "rps-nvim";
-    src = pkgs.fetchFromGitHub {
-      owner = "L3afMe";
-      repo = "rose-pine-sepia-nvim";
-      rev = "dc76c8c947322f256ca400c046a69dae435bfc21";
-      sha256 = "1b40xbdh38ch2v1grx1plgnbv72jk1y7gjmza3iv2nbz4wxxgqmy";
-    };
-  };
+
+  conf = import ../../../config { inherit pkgs; };
+
+  # Let binding bc f2k kept complaining :kekw:
+  json = pkgs.formats.json {};
 
 in
 {
@@ -96,7 +92,11 @@ in
         }
         
         ### Language Specific
+        # CSS
+        coc-css
+
         # Golang
+        coc-go
         {
           plugin = vim-go;
             config = ''
@@ -113,7 +113,14 @@ in
             '';
         }
 
+        # Java
+        coc-java
+
+        # JSON
+        coc-json
+
         # LaTeX
+        coc-vimtex
         vimtex
 
         # Lua
@@ -123,6 +130,7 @@ in
         vim-nix
 
         # Markdown
+        coc-markdownlint
         {
           plugin = markdown-preview-nvim;
             config = ''
@@ -134,6 +142,7 @@ in
         vim-markdown
         
         # Rust
+        coc-rust-analyzer
         {
           plugin = rust-vim;
             config = ''
@@ -147,6 +156,9 @@ in
 
         # TOML
         vim-toml
+
+        # YAML
+        coc-yaml
 
         ### Search
         # Clear highlighting automatically
@@ -171,12 +183,11 @@ in
 
         ### UI
         # Themes
-        {
-          plugin = rps-nvim;
-            config = ''
-              colorscheme rose-pine-sepia
-            '';
-        }
+      ] ++ (
+        if lib.hasAttrByPath ["colorschemePkg"] conf.theme.neovim
+          then [ conf.theme.neovim.colorschemePkg ]
+          else []
+      ) ++ [
 
         # Better tab comp popup
         float-preview-nvim
@@ -270,11 +281,14 @@ in
               autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '+' | OSCYankReg + | endif
             '';
         }
-      ];
+      ] ++ conf.neovim.plugins;
 
       extraPackages = with pkgs; [ rnix-lsp ];
 
       extraConfig = ''
+        colorscheme '' + conf.theme.neovim.colorscheme +
+        ''"
+
         """""""""""""""""""
         "  Auto Commands  "
         """""""""""""""""""
@@ -538,40 +552,21 @@ in
           autocmd Filetype go command! -bang AS call go#alternate#Switch(<bang>0, 'split')
           autocmd Filetype go command! -bang AT call go#alternate#Switch(<bang>0, 'tabe')
         augroup END
-      '';
+      '' + conf.neovim.extraConfig;
     };
 
-    home.file.coc-settings = {
-      target = ".config/nvim/coc-settings.vim";
-      text = ''
-        {
-          "go.goplsOptions": {
-            "codelenses": {
-              "gc_details": true
-            },
-            "analyses": {
-              "shadow": true,
-              "unusedparams": true,
-              "unusedresult": true,
-              "loopclosure": true,
-              "testinggoroutine": true,
-              "bools": true,
-              "tests": true,
-              "assign": true,
-              "shift": true,
-              "sortslice": true,
-              "nonewvars": true
-            },
-            "hoverKind": "Structured"
-          },
-          "Lua.intelliSense.searchDepth": 4,
-          "rust-analyzer.cargo.allFeatures": true,
-          "rust-analyzer.procMacro.enable": true,
-          "rust-analyzer.lens.methodReferences": true,
-          "rust-analyzer.checkOnSave.command": "clippy",
-          "smali.enable": true
-        }
-      '';
+    home.file = {
+      coc-settings = {
+        target = ".config/nvim/coc-settings.json";
+        source = json.generate "coc-settings.json" conf.neovim.cocConfig;
+      };
+
+      nixTheme = {
+        target = ".config/nvim/colors/nix.vim";
+        text = ''
+          hi shVar
+        '';
+      };
     };
   };
 }

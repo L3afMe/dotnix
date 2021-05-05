@@ -1,6 +1,6 @@
 { pkgs, lib, ... }:
 let
-  config = (import ../../config);
+  config = import ../../config { inherit pkgs; };
 in
 
 {
@@ -43,7 +43,7 @@ in
 
   i18n.defaultLocale = "en_US.UTF-8";
   console = {
-    colors = config.theme.colors.colors16;
+    colors = config.theme.base16;
     font = "Lat2-Terminus16";
     earlySetup = true;
     keyMap = "us";

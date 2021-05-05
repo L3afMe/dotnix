@@ -11,57 +11,35 @@ rec {
 
   # Accents
   black = {
-    light =  "232136";
-    dark = "575279";
+    normal =  "232136";
+    bright = "575279";
   };
   red = {
-    light =  "B4637A";
-    dark = "D7827E";
+    normal =  "B4637A";
+    bright = "D7827E";
   };
   yellow = {
-    light =  "EA9D34";
-    dark = "F6C177";
+    normal =  "EA9D34";
+    bright = "F6C177";
   };
   magenta = {
-    light =  "907AA9";
-    dark = "C4A7E7";
+    normal =  "907AA9";
+    bright = "C4A7E7";
   };
   blue = {
-    light =  "286983";
-    dark = "CECAED";
+    normal =  "286983";
+    bright = "CECAED";
   };
   cyan = {
-    light =  "56959F";
-    dark = "9CCFD8";
+    normal =  "56959F";
+    bright = "9CCFD8";
   };
   green = {
-    light =  "569F84";
-    dark = "9CD8C3";
+    normal =  "569F84";
+    bright = "9CD8C3";
   };
   white = {
-    light =  "F2E9DE";
-    dark = "FAF4ED";
+    normal =  "F2E9DE";
+    bright = "FAF4ED";
   };
-
-  colors16 = [
-    # Normal
-    background.normal
-    red.normal
-    green.normal
-    yellow.normal
-    blue.normal
-    magenta.normal
-    cyan.normal
-    foreground.normal
-
-    # Bright
-    background.alt
-    red.bright
-    green.bright
-    yellow.bright
-    blue.bright
-    magenta.bright
-    cyan.bright
-    foreground.alt
-  ];
 }

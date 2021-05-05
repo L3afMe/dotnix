@@ -1,7 +1,7 @@
 { inputs, pkgs, ... }:
 with pkgs.lib;
 let
-  config = import ../../config;
+  config = import ../../config { inherit pkgs; };
 in
 {
   imports = import ./programs;
