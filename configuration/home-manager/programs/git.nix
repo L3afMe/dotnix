@@ -1,10 +1,9 @@
 { config, pkgs, ... }:
 let
-  conf = import ../../../config { inherit pkgs; };
+  conf = (import ../../../config { inherit pkgs; }).programs.git.configOptions;
 in
 {
   config = {
-    # Git already in systemPackages from configuration.nix
     home.packages = with pkgs; [
       gitAndTools.hub
       gitAndTools.gh
@@ -13,8 +12,8 @@ in
     programs.git = {
       enable = true;
 
-      userName = conf.git.user.name;
-      userEmail = conf.git.user.email;
+      userName = conf.user.name;
+      userEmail = conf.user.email;
 
       aliases = {
         co = "checkout";
@@ -23,7 +22,7 @@ in
 
       delta.enable = true;
       extraConfig = {
-        init. defaultBranch = conf.git.defaultBranch;
+        init. defaultBranch = conf.defaultBranch;
         "pull".ff = "only";
         "commit".verbose = "true";
         hub.protocol = "git";

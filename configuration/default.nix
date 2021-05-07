@@ -40,7 +40,7 @@ nixpkgs.lib.nixosSystem rec {
       home-manager = {
         useGlobalPkgs = true;
         useUserPackages = true;
-        users."${config.user}" = import ./home-manager;
+        users."${config.user.name}" = import ./home-manager;
       };
     }
 

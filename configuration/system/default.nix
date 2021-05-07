@@ -2,7 +2,6 @@
 let
   config = import ../../config { inherit pkgs; };
 in
-
 {
   imports = [
     ./hardware-configuration.nix
@@ -41,7 +40,7 @@ in
     ];
   };
 
-  i18n.defaultLocale = "en_US.UTF-8";
+  i18n.supportedLocales = [ "en_US.UTF-8/UTF-8" ];
   console = {
     colors = config.theme.base16;
     font = "Lat2-Terminus16";
@@ -98,9 +97,9 @@ in
   sound.enable = true;
   hardware.pulseaudio.enable = true;
 
-  users.users."${config.user}" = {
+  users.users."${config.user.name}" = {
     isNormalUser = true;
-    home = "/home/${config.user}";
+    home = config.user.homeDir;
     extraGroups = [
       "adbusers"
       "audio"

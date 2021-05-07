@@ -1,10 +1,20 @@
+# ███╗   ██╗██╗██╗  ██╗
+# ████╗  ██║██║╚██╗██╔╝
+# ██╔██╗ ██║██║ ╚███╔╝ 
+# ██║╚██╗██║██║ ██╔██╗ 
+# ██║ ╚████║██║██╔╝ ██╗
+# ╚═╝  ╚═══╝╚═╝╚═╝  ╚═╝
+#      Nix config
+
 { inputs, system, nixpkgs, ... }:
 {
   autoOptimiseStore = true;
 
- binaryCaches = [
+  binaryCaches = [
     "https://cache.nixos.org"
     "https://nix-community.cachix.org"
+
+    # Provides xanmod-cacule kernel
     "https://fortuneteller2k.cachix.org"
   ];
 
@@ -18,11 +28,10 @@
     experimental-features = nix-command flakes
   '';
 
-  nixPath = let path = toString ../.; in
-    [
-      "nixpkgs=${nixpkgs}"
-      "home-manager=${inputs.home}"
-    ];
+  nixPath = [
+    "nixpkgs=${nixpkgs}"
+    "home-manager=${inputs.home}"
+  ];
 
   registry = {
     system.flake = inputs.self;

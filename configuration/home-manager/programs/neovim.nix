@@ -33,9 +33,19 @@ let
   # Let binding bc f2k kept complaining :kekw:
   json = pkgs.formats.json {};
 
+  generatedColorscheme = with conf.theme;
+    let
+      colorNames = builtins.attrNames nvimColors;
+      makeHi = group:
+        "hi ${group} " +
+          "guifg=${(nvimColors.${group}.fg or "NONE")} " +
+          "guibg=${(nvimColors.${group}.bg or "NONE")} " +
+          "gui=${(nvimColors.${group}.gui or "NONE")}";
+      highlights = builtins.map makeHi colorNames;
+    in builtins.concatStringsSep "\n" highlights; 
 in
 {
-  config = {
+  config = with conf.programs.neovim; {
     programs.neovim = {
       enable = true;
       package = pkgs.neovim-nightly;
@@ -47,7 +57,7 @@ in
 
       plugins = with pkgs.vimPlugins; [
         ### Autocomplete
-        { 
+        {
           plugin = coc-nvim;
           config = ''
             inoremap <silent><expr> <TAB>
@@ -79,7 +89,7 @@ in
             nmap <leader>rn <Plug>(coc-rename)
             
             xmap <leader>f <Plug>(coc-format-selected)
-            nmap <leader>f <Plug>(coc-format-selected)
+            nmap <leader>f <Plug>(coc-format)
             
             nnoremap <silent><nowait> <leader>a  :<C-u>CocList diagnostics<cr>
             nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
@@ -90,7 +100,7 @@ in
             autocmd BufWritePre *.go :silent call CocAction('runCommand', 'editor.action.organizeImport')
           '';
         }
-        
+
         ### Language Specific
         # CSS
         coc-css
@@ -99,18 +109,18 @@ in
         coc-go
         {
           plugin = vim-go;
-            config = ''
-              let g:go_fmt_command = "goimports"
-              let g:go_autodetect_gopath = 1
-              let g:go_list_type = "quickfix"
+          config = ''
+            let g:go_fmt_command = "goimports"
+            let g:go_autodetect_gopath = 1
+            let g:go_list_type = "quickfix"
 
-              let g:go_highlight_types = 1
-              let g:go_highlight_fields = 1
-              let g:go_highlight_functions = 1
-              let g:go_highlight_function_calls = 1
-              let g:go_highlight_extra_types = 1
-              let g:go_highlight_generate_tags = 1
-            '';
+            let g:go_highlight_types = 1
+            let g:go_highlight_fields = 1
+            let g:go_highlight_functions = 1
+            let g:go_highlight_function_calls = 1
+            let g:go_highlight_extra_types = 1
+            let g:go_highlight_generate_tags = 1
+          '';
         }
 
         # Java
@@ -133,21 +143,21 @@ in
         coc-markdownlint
         {
           plugin = markdown-preview-nvim;
-            config = ''
-              let g:mkdp_auto_start = 1
-              let g:mkdp_browser = 'qutebrowser'
-            '';
+          config = ''
+            let g:mkdp_auto_start = 1
+            let g:mkdp_browser = 'qutebrowser'
+          '';
         }
         tabular
         vim-markdown
-        
+
         # Rust
         coc-rust-analyzer
         {
           plugin = rust-vim;
-            config = ''
-              let g:rust_clip_command = 'xclip -selection clipboard'
-            '';
+          config = ''
+            let g:rust_clip_command = 'xclip -selection clipboard'
+          '';
         }
         webapi-vim
 
@@ -167,7 +177,7 @@ in
         # Better * motions
         {
           plugin = vim-asterisk;
-            config = ''
+          config = ''
             let g:asterisk#keeppos = 1
 
             map *   <Plug>(asterisk-*)
@@ -178,15 +188,15 @@ in
             map gz* <Plug>(asterisk-gz*)
             map z#  <Plug>(asterisk-z#)
             map gz# <Plug>(asterisk-gz#)
-            '';
+          '';
         }
 
         ### UI
         # Themes
       ] ++ (
-        if lib.hasAttrByPath ["colorschemePkg"] conf.theme.neovim
-          then [ conf.theme.neovim.colorschemePkg ]
-          else []
+        if lib.hasAttrByPath [ "colorschemePkg" ] themeOptions
+        then [ themeOptions.colorschemePkg ]
+        else []
       ) ++ [
 
         # Better tab comp popup
@@ -198,7 +208,7 @@ in
         # Nicer start screen
         {
           plugin = vim-startify;
-            config = ''
+          config = ''
             function! s:gitModified()
               let files = systemlist('git ls-files -m 2>/dev/null')
               return map(files, "{'line': v:val, 'path': v:val}")
@@ -221,18 +231,18 @@ in
             
               let g:startify_change_to_dir = 0
               let g:startify_fortune_use_unicode = 1
-            '';
+          '';
         }
 
         # Better syntax highlighting
         {
           plugin = nvim-treesitter;
-            config = ''
-              nnoremap <leader>ff <cmd>Telescope find_files<cr>
-              nnoremap <leader>fg <cmd>Telescope live_grep<cr>
-              nnoremap <leader>fb <cmd>Telescope buffers<cr>
-              nnoremap <leader>fh <cmd>Telescope help_tags<cr>
-            '';
+          config = ''
+            nnoremap <leader>ff <cmd>Telescope find_files<cr>
+            nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+            nnoremap <leader>fb <cmd>Telescope buffers<cr>
+            nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+          '';
         }
 
         ### File Editing
@@ -242,20 +252,20 @@ in
         # Snippets
         {
           plugin = ultisnips;
-            config = ''
-              let g:UltiSnipsExpandTrigger="<c-j>"
-              let g:UltiSnipsJumpForwardTrigger="<c-b>"
-              let g:UltiSnipsJumpBackwardTrigger="<c-z>"
-              let g:UltiSnipsEditSplit="vertical"
-            '';
+          config = ''
+            let g:UltiSnipsExpandTrigger="<c-j>"
+            let g:UltiSnipsJumpForwardTrigger="<c-b>"
+            let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+            let g:UltiSnipsEditSplit="vertical"
+          '';
         }
 
         # Autosave
         {
           plugin = vim-auto-save;
-            config = ''
-              let g:auto_save = 1
-            '';
+          config = ''
+            let g:auto_save = 1
+          '';
         }
 
         ### Telescope
@@ -276,19 +286,16 @@ in
         # System clipboard yank
         {
           plugin = vim-oscyank;
-            config = ''
-              vnoremap <leader>y :OSCYank<CR>
-              autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '+' | OSCYankReg + | endif
-            '';
+          config = ''
+            vnoremap <leader>y :OSCYank<CR>
+            autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '+' | OSCYankReg + | endif
+          '';
         }
-      ] ++ conf.neovim.plugins;
+      ] ++ configOptions.extraPlugins;
 
       extraPackages = with pkgs; [ rnix-lsp ];
 
       extraConfig = ''
-        colorscheme '' + conf.theme.neovim.colorscheme +
-        ''"
-
         """""""""""""""""""
         "  Auto Commands  "
         """""""""""""""""""
@@ -331,7 +338,7 @@ in
         
         augroup custom_highlight
           autocmd!
-          autocmd ColorScheme * highlight YankColor ctermfg=59 ctermbg=41 guifg=#34495E guibg=#2ECC71
+          autocmd Colorscheme * highlight YankColor ctermfg=59 ctermbg=41 guifg=#34495E guibg=#2ECC71
         augroup END
         
         augroup highlight_yank
@@ -359,6 +366,10 @@ in
         """""""""""""
         "  Mapping  "
         """""""""""""
+        " Set leader to space
+        nnoremap <SPACE> <Nop>
+        let mapleader=" "
+
         " Make ; and : open cmd
         nnoremap ; :
         xnoremap ; :
@@ -433,6 +444,7 @@ in
         """""""""""""
         "" General
         set termguicolors
+        colorscheme ${themeOptions.colorscheme}
         
         set splitbelow splitright
         
@@ -552,19 +564,32 @@ in
           autocmd Filetype go command! -bang AS call go#alternate#Switch(<bang>0, 'split')
           autocmd Filetype go command! -bang AT call go#alternate#Switch(<bang>0, 'tabe')
         augroup END
-      '' + conf.neovim.extraConfig;
+      '' + configOptions.extraConfig;
     };
 
     home.file = {
       coc-settings = {
         target = ".config/nvim/coc-settings.json";
-        source = json.generate "coc-settings.json" conf.neovim.cocConfig;
+        source = json.generate "coc-settings.json" configOptions.cocConfig;
       };
 
+      # Test
       nixTheme = {
         target = ".config/nvim/colors/nix.vim";
         text = ''
-          hi shVar
+          " File generated by L3af's NixOS config
+          " modify in config/theme.nix
+
+          if version > 580
+            hi clear
+            if exists("syntax_on")
+              syntax reset
+            endif
+          endif
+
+          let g:colors_name = "nix"
+
+          ${generatedColorscheme}
         '';
       };
     };

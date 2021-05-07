@@ -7,15 +7,16 @@ in
   imports = import ./programs;
 
   home = {
-    homeDirectory = "/home/${config.user}";
-    username = config.user;
+    homeDirectory = config.user.homeDir;
+    username = config.user.name;
 
     packages = with pkgs; [
       # Terminal
       kitty
 
-      # Browser - Update to vieb when fixed https://github.com/NixOS/nixpkgs/pull/115708
+      # Browsers
       qutebrowser
+      vieb
 
       # Screenshots
       maim
@@ -41,7 +42,7 @@ in
     ];
 
     sessionVariables = {
-      EDITOR = "nvim";
+      EDITOR = config.user.programs.editor;
     };
 
     stateVersion = "21.03";

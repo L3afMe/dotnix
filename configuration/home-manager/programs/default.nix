@@ -1,5 +1,6 @@
 [
+  ./git.nix
   ./kitty.nix
   ./neovim.nix
-  ./git.nix
+  ./vieb.nix
 ]
