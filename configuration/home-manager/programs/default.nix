@@ -1,6 +1,6 @@
 [
   ./git.nix
   ./kitty.nix
-  ./neovim.nix
+  ./neovim/default.nix
   ./vieb.nix
 ]

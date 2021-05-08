@@ -221,7 +221,7 @@ rec {
     Delimiter.fg = (elemAt base16 15);
     Quote.fg = (elemAt base16 11);
     Float.fg = (elemAt base16 9);
-    Function.fg = (elemAt base16 13);
+    Function.fg = (elemAt base16 7);
     Identifier.fg = (elemAt base16 5);
     Include.fg = (elemAt base16 6);
     Number.fg = (elemAt base16 9);

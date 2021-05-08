@@ -21,6 +21,7 @@ nixpkgs.lib.nixosSystem rec {
             stable = import stable { inherit config system; };
             staging = import staging { inherit config system; };
             staging-next = import staging-next { inherit config system; };
+            new-vim-shit = import new-vim-shit { inherit config system; };
           };
         in
         {

@@ -103,5 +103,13 @@ rec {
     StatusLine.bg = rps.overlay;
     StatusLineNC.bg = rps.overlay;
     Search.bg = rps.overlay;
+    Visual.bg = rps.overlay;
+    TSFunction.bg = rps.sun;
+    TSMethod.bg = rps.sun;
+    TSKeywordFunc.bg = rps.sun;
+    TSProperty.bg = rps.sun;
+    TSType.bg = rps.sun;
+    TSVariable.bg = rps.sun;
+    TSPunctBracket.bg = rps.sun;
   };
 }

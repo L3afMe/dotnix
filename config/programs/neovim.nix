@@ -43,14 +43,6 @@ rec {
     colorscheme = "nix";
 
     # Can be used to download a prebuilt colorscheme
-    colorschemePkg = pkgs.vimUtils.buildVimPlugin {
-      name = "rps-nvim";
-      src = pkgs.fetchFromGitHub {
-        owner = "L3afMe";
-        repo = "rose-pine-sepia-nvim";
-        rev = "dc76c8c947322f256ca400c046a69dae435bfc21";
-        sha256 = "1b40xbdh38ch2v1grx1plgnbv72jk1y7gjmza3iv2nbz4wxxgqmy";
-      };
-    };
+    colorschemePkg = pkgs.vimPlugins.zephyr-nvim; 
   };
 }

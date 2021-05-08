@@ -141,6 +141,22 @@
         "type": "github"
       }
     },
+    "new-vim-shit": {
+      "locked": {
+        "lastModified": 1620446574,
+        "narHash": "sha256-8g9x3InecYgU9PCqKrZXWVg/OswsrEwReqDog+evqM0=",
+        "owner": "fortuneteller2k",
+        "repo": "nixpkgs",
+        "rev": "75b0c715c337aaf13c0233612a2e44dd854a47cc",
+        "type": "github"
+      },
+      "original": {
+        "owner": "fortuneteller2k",
+        "ref": "add-vimplugins",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1620162462,
@@ -178,6 +194,7 @@
         "home": "home",
         "master": "master",
         "neovim-nightly": "neovim-nightly",
+        "new-vim-shit": "new-vim-shit",
         "nixpkgs": [
           "master"
         ],

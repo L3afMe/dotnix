@@ -12,6 +12,8 @@
       inputs.nixpkgs.follows = "unstable";
     };
 
+    new-vim-shit.url = "github:fortuneteller2k/nixpkgs/add-vimplugins";
+
     neovim-nightly.url = "github:nix-community/neovim-nightly-overlay";
     rust.url = "github:oxalica/rust-overlay";
 
