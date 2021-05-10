@@ -2,13 +2,8 @@
   description = "L3af's personal NixOS configuration.";
 
   inputs = {
-    comma = {
-      url = "github:Shopify/comma";
-      flake = false;
-    };
-
     home = {
-      url = "github:nix-community/home-manager";
+      url = "github:l3afme/home-manager";
       inputs.nixpkgs.follows = "unstable";
     };
 

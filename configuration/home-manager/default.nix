@@ -1,28 +1,28 @@
-{ inputs, pkgs, ... }:
-with pkgs.lib;
+{ inputs, pkgs, config, lib, ... }:
 let
-  config = import ../../config { inherit pkgs; };
+  conf = import ../../config { inherit pkgs; };
+
+  getBin = conf.helpers.getBin;
+  getPkg = conf.helpers.getPkg;
 in
 {
   imports = import ./programs;
 
-  home = {
-    homeDirectory = config.user.homeDir;
-    username = config.user.name;
+  home = with conf.user;
+  {
+    homeDirectory = homeDir;
+    username = name;
 
-    packages = with pkgs; [
-      # Terminal
-      kitty
-
-      # Browsers
-      qutebrowser
-      vieb
-
+    packages = 
+    let
+      programNames = builtins.attrNames programs;
+      getPkgFromName = name:
+        getPkg programs."${name}";
+      userPkgs = builtins.map getPkgFromName programNames;
+    in
+    userPkgs ++ (with pkgs; [
       # Screenshots
       maim
-
-      # Run commands without installing package
-      comma
 
       # Rust
       rustc
@@ -33,16 +33,10 @@ in
       # Nixpkgs additions
       nixpkgs-fmt
       nixpkgs-review
-
-      # Node PM
-      yarn
-
-      # Python
-      python38Full
-    ];
+    ]) ++ userPackages;
 
     sessionVariables = {
-      EDITOR = config.user.programs.editor;
+      EDITOR = getBin programs.editor;
     };
 
     stateVersion = "21.03";

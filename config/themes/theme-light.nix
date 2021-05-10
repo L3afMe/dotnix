@@ -86,6 +86,14 @@ rec {
   };
 
   # Custom compontents
+  viebColors = {
+    suggestions = {
+      border = rps.overlay;
+      selected = rps.overlay;
+    };
+    notifications.border = rps.overlay;
+  };
+
   nvimColors = {
     Comment.fg = rps.ignored;
     CursorLine.bg = rps.overlay;
@@ -104,12 +112,8 @@ rec {
     StatusLineNC.bg = rps.overlay;
     Search.bg = rps.overlay;
     Visual.bg = rps.overlay;
-    TSFunction.bg = rps.sun;
-    TSMethod.bg = rps.sun;
-    TSKeywordFunc.bg = rps.sun;
-    TSProperty.bg = rps.sun;
-    TSType.bg = rps.sun;
-    TSVariable.bg = rps.sun;
-    TSPunctBracket.bg = rps.sun;
+    FoldColumn.bg = rps.overlay;
+    Folded.bg = rps.overlay;
+    IncSearch.bg = rps.overlay;
   };
 }

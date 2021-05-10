@@ -7,7 +7,10 @@
 # ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝
 #          https://github.com/neovim/neovim
 
-{ pkgs, ... }:
+{ pkgs }:
+let
+  getPkgBin = (import ../helpers.nix { lib = pkgs.lib; }).getPkgBin;
+in
 rec {
   configOptions = {
     extraConfig = ''
@@ -24,7 +27,7 @@ rec {
 
       languageserver = {
         nix = {
-          command = "${pkgs.rnix-lsp}/bin/rnix-lsp";
+          command = "rnix-lsp";
 
           filetypes = [
             "nix"

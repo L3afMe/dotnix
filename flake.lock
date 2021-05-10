@@ -1,21 +1,5 @@
 {
   "nodes": {
-    "comma": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1588170489,
-        "narHash": "sha256-IT7zlcM1Oh4sWeCJ1m4NkteuajPxTnNo1tbitG0eqlg=",
-        "owner": "Shopify",
-        "repo": "comma",
-        "rev": "4a62ec17e20ce0e738a8e5126b4298a73903b468",
-        "type": "github"
-      },
-      "original": {
-        "owner": "Shopify",
-        "repo": "comma",
-        "type": "github"
-      }
-    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -69,15 +53,15 @@
         ]
       },
       "locked": {
-        "lastModified": 1620252045,
-        "narHash": "sha256-yDVOFHU1dZ/J0a4op9pImqDDKZxmeXuIwOQguJrTW9I=",
-        "owner": "nix-community",
+        "lastModified": 1620656536,
+        "narHash": "sha256-ih/z2XzGJ8nuh3fnzAH5G4tcpDT4XJNbhE0tVuAxRK4=",
+        "owner": "l3afme",
         "repo": "home-manager",
-        "rev": "90dd375eba16e11949d4a4a7538554dc8e9ceb8f",
+        "rev": "5005e772d1638ed7a561eb01ba39c442822bd93f",
         "type": "github"
       },
       "original": {
-        "owner": "nix-community",
+        "owner": "l3afme",
         "repo": "home-manager",
         "type": "github"
       }
@@ -190,7 +174,6 @@
     },
     "root": {
       "inputs": {
-        "comma": "comma",
         "home": "home",
         "master": "master",
         "neovim-nightly": "neovim-nightly",

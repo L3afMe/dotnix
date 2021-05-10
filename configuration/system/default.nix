@@ -1,6 +1,8 @@
 { pkgs, lib, ... }:
 let
   config = import ../../config { inherit pkgs; };
+  termBase16 = map (builtins.replaceStrings [ "#" ] [ "" ])
+    config.theme.base16;
 in
 {
   imports = [
@@ -17,8 +19,13 @@ in
         enable = true;
 
         version = 2;
-        useOSProber = true;
         device = "/dev/sda";
+
+        extraEntries = ''
+          menuentry "Windows 10" {
+            chainloader (hd0,1)+1
+          }
+        '';
       };
     };
   };
@@ -42,60 +49,62 @@ in
 
   i18n.supportedLocales = [ "en_US.UTF-8/UTF-8" ];
   console = {
-    colors = config.theme.base16;
+    colors = termBase16;
     font = "Lat2-Terminus16";
     earlySetup = true;
     keyMap = "us";
   };
 
-  powerManagement.cpuFreqGovernor = "performanc";
+  powerManagement.cpuFreqGovernor = "performance";
 
-  programs.command-not-found.enable = false;
+  programs = {
+    xwayland.enable = true;
+    command-not-found.enable = false;
+  };
 
-  services = {
-    xserver = {
+  services.xserver =
+    with config.user.xserver;
+  {
+    enable = enable;
+    dpi = 96;
+
+    layout = "us";
+
+    libinput = {
       enable = true;
-      dpi = 96;
 
-      layout = "us";
+      mouse.accelProfile = "flat";
+      touchpad.naturalScrolling = true;
+    };
 
-      libinput = {
+    displayManager = {
+      defaultSession = "none+${defaultSession}";
+
+      lightdm.greeters.gtk = {
         enable = true;
 
-        mouse.accelProfile = "flat";
-        touchpad.naturalScrolling = true;
-      };
-
-      displayManager = {
-        defaultSession = "none+awesome";
-
-        lightdm.greeters.gtk = {
-          enable = true;
-
-          extraConfig = ''
-            position = 10%,start 65%,center
-            default-user-image = /assets/usericon
-            xft-antialias = true
-            xft-dpi = 96
-            xft-hintstyle = slight
-            xft-rgba = rgb
-            indicators = ~clock;~power;
-          '';
-        };
-      };
-
-      windowManager.awesome = {
-        enable = true;
-
-        luaModules = with pkgs.luaPackages; [
-          luarocks
-        ];
+        extraConfig = ''
+          position = 10%,start 65%,center
+          default-user-image = /assets/usericon
+          xft-antialias = true
+          xft-dpi = 96
+          xft-hintstyle = slight
+          xft-rgba = rgb
+          indicators = ~clock;~power;
+        '';
       };
     };
   };
 
   sound.enable = true;
-  hardware.pulseaudio.enable = true;
+  hardware = {
+    pulseaudio.enable = true;
+
+    opengl = {
+      enable = true;
+      driSupport = true;
+    };
+  };
 
   users.users."${config.user.name}" = {
     isNormalUser = true;
@@ -110,6 +119,7 @@ in
 
   environment = {
     binsh = "${pkgs.dash}/bin/dash";
+
     systemPackages = with pkgs; [
       bat
       curl
@@ -117,12 +127,11 @@ in
       fd
       file
       gcc
+      ripgrep
       unzip
-      xclip
       zip
-    ];
+    ] ++ config.user.systemPackages;
   };
-  
 
   fonts = {
     fonts = with pkgs; [

@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 let
   conf = (import ../../../config { inherit pkgs; }).programs.git.configOptions;
 in

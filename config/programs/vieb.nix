@@ -9,15 +9,18 @@
 
 { pkgs, ... }:
 let
-  user = (import ../config.nix { inherit pkgs; });
+  user = import ../config.nix { inherit pkgs; };
+  getBin = (import ../config.nix { lib = pkgs.lib; }).getBin;
 in 
 rec {
   configOptions = {
-    search = "https://duckduckgo.com/?q=%s";
-    mouseSupport = false;
-    restoreTabs = true;
     caseInsensitive = true;
-    editorCommand = user.programs.editor;
+    editorCommand = getBin user.programs.editor;
+    # Mouse support needed for scrolling
+    # even though it's keyboard mapping
+    mouseSupport = true;
+    restoreTabs = true;
+    search = "https://duckduckgo.com/?q=%s";
 
     extraConfig = ''
     '';

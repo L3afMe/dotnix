@@ -7,7 +7,7 @@
 #     ╚═════╝ ╚═╝   ╚═╝
 #  https://github.com/git/git
 
-{ pkgs, ... }:
+{ pkgs }:
 let
   user = (import ../config.nix { inherit pkgs; });
 in

@@ -7,7 +7,6 @@
 #  ╚═╝  ╚═╝╚═╝   ╚═╝      ╚═╝      ╚═╝
 #   https://github.com/kovidgoyal/kitty
 
-{ pkgs, ... }:
 rec {
   configOptions = {
     extraConfig = ''

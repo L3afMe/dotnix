@@ -7,24 +7,21 @@
 #    ╚═╝   ╚═╝  ╚═╝╚══════╝╚═╝     ╚═╝╚══════╝
 #       Global theming and visual options
 
-{ pkgs, ... }:
+{ pkgs }:
 let
   lib = pkgs.lib;
   elemAt = lib.elemAt;
 in
 rec {
-  # Toggle light theme, can override "theme"
-  # if you want to use a different theme
+  # Switches background/foreground colors
   lightTheme = true;
-  theme =
-    if lightTheme
-    then import ./themes/theme-light.nix
-    else import ./themes/theme-dark.nix;
+  theme = import  ./themes/theme-light.nix;
 
   # Global theming values
-  borderWidth = "2";
-  cornerRadius = "0";
-  padding = "15";
+  borderWidth = 5;
+  cornerRadius = 0;
+  gaps = 15;
+  padding = 15;
 
   ########################################
   # !   DO NOT MODIFY ANYTHING BELOW   ! #
@@ -34,12 +31,24 @@ rec {
 
   colors = with theme; {
     foreground = {
-      normal = foreground.normal or "#000000";
-      bright = foreground.bright or "#555555";
+      normal =
+        if lightTheme
+        then black.normal or "#000000"
+        else white.normal or "#AAAAAA";
+      bright = 
+        if lightTheme
+        then black.bright or "#555555"
+        else white.bright or "#FFFFFF";
     };
     background = {
-      normal = background.normal or "#AAAAAA";
-      bright = background.bright or "#FFFFFF";
+      normal = 
+        if lightTheme
+        then white.normal or "#AAAAAA"
+        else black.normal or "#000000";
+      bright = 
+        if lightTheme
+        then white.bright or "#FFFFFF"
+        else black.bright or "#555555";
     };
     black = {
       normal = black.normal or "#000000";
@@ -113,144 +122,509 @@ rec {
         normal = colors.background.bright;
         selected = viebColors.background;
       };
+
+      suspended = colors.red.bright;
+      audio = colors.blue.normal;
+      muted = colors.foreground.normal;
+      muted-playing = colors.yellow.normal;
+      crashed = colors.red.normal;
+      scrollbar = colors.cyan.normal;
+    };
+
+    modes = {
+      normal = {
+        bg = "none";
+        fg = colors.foreground.normal;
+      };
+      command = {
+        bg = "none";
+        fg = colors.red.normal;
+      };
+      insert = {
+        bg = "none";
+        fg = colors.green.normal;
+      };
+      follow = {
+        bg = "none";
+        fg = colors.magenta.normal;
+      };
+      explore = {
+        bg = "none";
+        fg = colors.cyan.normal;
+      };
+      search = {
+        bg = "none";
+        fg = colors.yellow.normal;
+      };
+      pointer = {
+        bg = "none";
+        fg = colors.foreground.normal;
+      };
+      visual = {
+        bg = "none";
+        fg = colors.blue.normal;
+      };
+    };
+
+    suggestions = {
+      bg = colors.background.normal;
+      border = colors.foreground.normal;
+      selected = colors.background.bright;
+      url = colors.foreground.bright;
+      file = colors.foreground.bright;
+    };
+
+    url = {
+      default = colors.foreground.normal;
+      search = colors.yellow.normal;
+      searchwords = colors.magenta.normal;
+      url = colors.cyan.normal;
+      suggest = colors.green.normal;
+      file = colors.yellow.normal;
+      invalid = colors.red.normal;
+      hover = {
+        bg = colors.background.normal;
+        fg = colors.foreground.normal;
+      };
+    };
+
+    follow = {
+      text = colors.foreground.normal;
+      url = {
+        bg = colors.cyan.bright;
+        border = colors.cyan.normal;
+      };
+      click = {
+        bg = colors.red.bright;
+        border = colors.red.normal;
+      };
+      insert = {
+        bg = colors.green.bright;
+        border = colors.green.normal;
+      };
+      onclick = {
+        bg = colors.yellow.bright;
+        border = colors.yellow.normal;
+      };
+      other = {
+        bg = colors.foreground.bright;
+        border = colors.foreground.normal;
+      };
+    };
+
+    notifications = {
+      border = colors.foreground.normal;
+      date = colors.foreground.bright;
+      permission = colors.foreground.bright;
+      error = colors.red.normal;
+      warning = colors.yellow.normal;
+      info = colors.foreground.normal;
+      success = colors.green.normal;
     };
   } (theme.viebColors or {});
 
-  nvimColors = lib.attrsets.recursiveUpdate {
-    # Builtin
-    Normal = {
-      fg = (elemAt base16 7);
-      bg = (elemAt base16 0);
-    };
-    Bold.gui = "BOLD";
-    Debug.fg = (elemAt base16 8);
-    Directory.fg = (elemAt base16 13);
-    Error = {
-      fg = (elemAt base16 8);
-      bg = (elemAt base16 9);
-    };
-    ErrorMsg = {
-      fg = (elemAt base16 0);
-      bg = (elemAt base16 8);
-    };
-    Exception.fg = (elemAt base16 5);
-    FoldColumn = {
-      fg = (elemAt base16 12);
-      bg = (elemAt base16 1);
-    };
-    Folded = {
-      fg = (elemAt base16 3);
-      bg = (elemAt base16 1);
-    };
-    IncSearch = {
-      fg = (elemAt base16 1);
-      bg = (elemAt base16 9);
-    };
-    Macro.fg = (elemAt base16 7);
-    MatchParen.gui = "BOLD";
-    ModeMsg.fg = (elemAt base16 11);
-    MoreMsg.fg = (elemAt base16 11);
-    Question.fg = (elemAt base16 13);
-    Search = {
-      bg = (elemAt base16 8);
-      gui = "BOLD";
-    };
-    Substitute = {
-      bg = (elemAt base16 8);
-      gui = "BOLD";
-    };
-    SpecialKey.fg = (elemAt base16 9);
-    TooLong.fg = (elemAt base16 8);
-    Underlined.fg = (elemAt base16 8);
-    Visual.bg = (elemAt base16 8);
-    VisualNOS.bg = (elemAt base16 8);
-    WarningMsg.fg = (elemAt base16 8);
-    WildMenu = {
-      fg = (elemAt base16 8);
-      bg = (elemAt base16 10);
-    };
-    Title.fg = (elemAt base16 13);
-    Conceal = {
-      fg = (elemAt base16 13);
-      bg = (elemAt base16 0);
-    };
-    Cursor = {
-      fg = (elemAt base16 0);
-      bg = (elemAt base16 7);
-    };
-    NonText.fg = (elemAt base16 3);
-    LineNr.fg = (elemAt base16 15);
-    StatusLine = {
-      fg = (elemAt base16 7);
-      bg = (elemAt base16 0);
-    };
-    StatusLineNC = {
-      fg = (elemAt base16 7);
-      bg = (elemAt base16 0);
-    };
-    ColorColumn.bg = (elemAt base16 8);
-    CursorLine.bg = (elemAt base16 8);
-    CursorLineNr = {
-      fg = (elemAt base16 7);
-      bg = (elemAt base16 8);
-    };
-    QuickFixLine.bg = (elemAt base16 1);
-    Pmenu = {
-      fg = (elemAt base16 7);
-      bg = (elemAt base16 8);
-    };
-    PmenuSel = {
-      fg = (elemAt base16 0);
-      bg = colors.background.normal;
-      gui = "BOLD";
-    };
-    PmenuSbar.bg = (elemAt base16 7);
-    PmenuThumb.bg = (elemAt base16 8);
-    TabLine = {
-      fg = (elemAt base16 3);
-      bg = (elemAt base16 1);
-    };
-    TabLineFill.fg = (elemAt base16 8);
-    TabLineSel = { fg = (elemAt base16 8); gui = "BOLD"; };
-    Boolean.fg = (elemAt base16 9);
-    Character.fg = (elemAt base16 8);
-    Comment.fg = (elemAt base16 3);
-    Conditional.fg = (elemAt base16 6);
-    Constant.fg = (elemAt base16 9);
-    Define.fg = (elemAt base16 14);
-    Delimiter.fg = (elemAt base16 15);
-    Quote.fg = (elemAt base16 11);
-    Float.fg = (elemAt base16 9);
-    Function.fg = (elemAt base16 7);
-    Identifier.fg = (elemAt base16 5);
-    Include.fg = (elemAt base16 6);
-    Number.fg = (elemAt base16 9);
-    Operator.fg = (elemAt base16 5);
-    PreProc.fg = (elemAt base16 5);
-    Repeat.fg = (elemAt base16 10);
-    Special.fg = (elemAt base16 4);
-    SpecialChar.fg = (elemAt base16 9);
-    Statement.fg = (elemAt base16 5);
-    StorageClass.fg = (elemAt base16 10);
-    String.fg = (elemAt base16 3);
-    Integer.fg = (elemAt base16 9);
-    Structure.fg = (elemAt base16 5);
-    Tag.fg = (elemAt base16 10);
-    Todo.fg = (elemAt base16 10);
-    Type.fg = (elemAt base16 6);
-    Typedef.fg = (elemAt base16 10);
-    DiffAdd.fg = (elemAt base16 15);
-    DiffChange.fg = (elemAt base16 3);
-    DiffDelete.fg = (elemAt base16 9);
-    Noise.fg = (elemAt base16 15);
-    SignColumn = {};
+  nvimColors =
+    lib.attrsets.recursiveUpdate {
+      termColors = base16;
+      # Builtin
+      Normal = {
+        fg = (elemAt base16 7);
+        ctermfg = "7";
+        bg = (elemAt base16 0);
+        ctermbg = "0";
+      };
+      Bold.gui = "BOLD";
+      Debug = { 
+        fg = (elemAt base16 8);
+        ctermfg = "8";
+      };
+      Directory = { 
+        fg = (elemAt base16 5);
+        ctermfg = "5";
+      };
+      Error = { 
+        fg = (elemAt base16 1);
+        ctermfg = "1";
+      };
+      ErrorMsg = { 
+        fg = (elemAt base16 1);
+        ctermfg = "1";
+      };
+      Exception = { 
+        fg = (elemAt base16 5);
+        ctermfg = "5";
+      };
+      FoldColumn = {
+        fg = (elemAt base16 7);
+        ctermfg = "7";
+        bg = (elemAt base16 8);
+        ctermbg = "8";
+      };
+      Folded = {
+        fg = (elemAt base16 7);
+        ctermfg = "7";
+        bg = (elemAt base16 8);
+        ctermbg = "8";
+      };
+      IncSearch = {
+        bg = (elemAt base16 8);
+        ctermbg = "8";
+      };
+      Macro = { 
+        fg = (elemAt base16 7);
+        ctermfg = "7";
+      };
+      MatchParen.gui = "BOLD";
+      ModeMsg = { 
+        fg = (elemAt base16 11);
+        ctermfg = "11";
+      };
+      MoreMsg = { 
+        fg = (elemAt base16 11);
+        ctermfg = "11";
+      };
+      Question = { 
+        fg = (elemAt base16 5);
+        ctermfg = "5";
+      };
+      Search = {
+        bg = (elemAt base16 8);
+        ctermbg = "8";
+        gui = "BOLD";
+      };
+      Substitute = {
+        bg = (elemAt base16 7);
+        ctermbg = "7";
+        gui = "BOLD";
+      };
+      SpecialKey = { 
+        fg = (elemAt base16 9);
+        ctermfg = "9";
+      };
+      TooLong = { 
+        fg = (elemAt base16 7);
+        ctermfg = "7";
+      };
+      Underlined = { 
+        fg = (elemAt base16 7);
+        ctermfg = "7";
+      };
+      Visual = { 
+        bg = (elemAt base16 8);
+        ctermbg = "8";
+      };
+      VisualNOS.bg = (elemAt base16 8);
+      VisualNOS.ctermbg = "8";
+      WarningMsg = { 
+        fg = (elemAt base16 3);
+        ctermfg = "3";
+      };
+      WildMenu = {
+        fg = (elemAt base16 8);
+        ctermfg = "8";
+        bg = (elemAt base16 10);
+        ctermbg = "10";
+      };
+      Title = { 
+        fg = (elemAt base16 13);
+        ctermfg = "13";
+      };
+      Conceal = {
+        fg = (elemAt base16 13);
+        ctermfg = "13";
+        bg = (elemAt base16 0);
+        ctermbg = "0";
+      };
+      Cursor = {
+        fg = (elemAt base16 0);
+        ctermfg = "0";
+        bg = (elemAt base16 7);
+        ctermbg = "7";
+      };
+      NonText = { 
+        fg = (elemAt base16 3);
+        ctermfg = "3";
+      };
+      LineNr = { 
+        fg = (elemAt base16 15);
+        ctermfg = "15";
+      };
+      StatusLine = {
+        fg = (elemAt base16 7);
+        ctermfg = "7";
+        bg = (elemAt base16 0);
+        ctermbg = "0";
+      };
+      StatusLineNC = {
+        fg = (elemAt base16 7);
+        ctermfg = "7";
+        bg = (elemAt base16 0);
+        ctermbg = "0";
+      };
+      ColorColumn = { 
+        bg = (elemAt base16 8);
+        ctermbg = "8";
+      };
+      CursorLine = { 
+        bg = (elemAt base16 8);
+        ctermbg = "8";
+      };
+      CursorLineNr = {
+        fg = (elemAt base16 7);
+        ctermfg = "7";
+        bg = (elemAt base16 8);
+        ctermbg = "8";
+      };
+      QuickFixLine = { 
+        bg = (elemAt base16 1);
+        ctermbg = "1";
+      };
+      Pmenu = {
+        fg = (elemAt base16 7);
+        ctermfg = "7";
+        bg = (elemAt base16 8);
+        ctermbg = "8";
+      };
+      PmenuSel = {
+        fg = (elemAt base16 0);
+        ctermfg = "0";
+        bg = (elemAt base16 7);
+        ctermbg = "7";
+        gui = "BOLD";
+      };
+      PmenuSbar = { 
+        bg = (elemAt base16 7);
+        ctermbg = "7";
+      };
+      PmenuThumb = { 
+        bg = (elemAt base16 8);
+        ctermbg = "8";
+      };
+      TabLine = {
+        fg = (elemAt base16 3);
+        ctermfg = "3";
+        bg = (elemAt base16 1);
+        ctermbg = "1";
+      };
+      TabLineFill = { 
+        fg = (elemAt base16 8);
+        ctermfg = "8";
+      };
+      TabLineSel = { 
+        fg = (elemAt base16 8);
+        ctermfg = "8";
+        gui = "BOLD";
+      };
+      Boolean = { 
+        fg = (elemAt base16 9);
+        ctermfg = "9";
+      };
+      Character = { 
+        fg = (elemAt base16 3);
+        ctermfg = "3";
+      };
+      Comment = { 
+        fg = (elemAt base16 3);
+        ctermfg = "3";
+      };
+      Conditional = { 
+        fg = (elemAt base16 6);
+        ctermfg = "6";
+      };
+      Constant = { 
+        fg = (elemAt base16 9);
+        ctermfg = "9";
+      };
+      Define = { 
+        fg = (elemAt base16 14);
+        ctermfg = "14";
+      };
+      Delimiter = { 
+        fg = (elemAt base16 15);
+        ctermfg = "15";
+      };
+      Quote = { 
+        fg = (elemAt base16 11);
+        ctermfg = "11";
+      };
+      Float = { 
+        fg = (elemAt base16 9);
+        ctermfg = "9";
+      };
+      Function = { 
+        fg = (elemAt base16 7);
+        ctermfg = "7";
+      };
+      Identifier = { 
+        fg = (elemAt base16 5);
+        ctermfg = "5";
+      };
+      Include = { 
+        fg = (elemAt base16 6);
+        ctermfg = "6";
+      };
+      Number = { 
+        fg = (elemAt base16 9);
+        ctermfg = "9";
+      };
+      Operator = { 
+        fg = (elemAt base16 5);
+        ctermfg = "5";
+      };
+      PreProc = { 
+        fg = (elemAt base16 5);
+        ctermfg = "5";
+      };
+      Repeat = { 
+        fg = (elemAt base16 10);
+        ctermfg = "10";
+      };
+      Special = { 
+        fg = (elemAt base16 4);
+        ctermfg = "4";
+      };
+      SpecialChar = { 
+        fg = (elemAt base16 9);
+        ctermfg = "9";
+      };
+      Statement = { 
+        fg = (elemAt base16 5);
+        ctermfg = "5";
+      };
+      StorageClass = { 
+        fg = (elemAt base16 10);
+        ctermfg = "10";
+      };
+      String = { 
+        fg = (elemAt base16 3);
+        ctermfg = "3";
+      };
+      Integer = { 
+        fg = (elemAt base16 9);
+        ctermfg = "9";
+      };
+      Structure = { 
+        fg = (elemAt base16 5);
+        ctermfg = "5";
+      };
+      Tag = { 
+        fg = (elemAt base16 10);
+        ctermfg = "10";
+      };
+      Todo = { 
+        fg = (elemAt base16 2);
+        ctermfg = "2";
+      };
+      Type = { 
+        fg = (elemAt base16 6);
+        ctermfg = "6";
+      };
+      Typedef = { 
+        fg = (elemAt base16 10);
+        ctermfg = "10";
+      };
+      DiffAdd = { 
+        fg = (elemAt base16 15);
+        ctermfg = "15";
+      };
+      DiffChange = { 
+        fg = (elemAt base16 3);
+        ctermfg = "3";
+      };
+      DiffDelete = { 
+        fg = (elemAt base16 9);
+        ctermfg = "9";
+      };
+      Noise = { 
+        fg = (elemAt base16 15);
+        ctermfg = "15";
+      };
+      SignColumn = {};
 
-    # Lua specific
-    luaBraces.fg = (elemAt base16 15);
-    luaFuncCall.fg = (elemAt base16 5);
+      # Treesitter highlighting
+      TSFunction = { 
+        fg = (elemAt base16 5);
+        ctermfg = "5";
+      };
+      TSMethod = { 
+        fg = (elemAt base16 5);
+        ctermfg = "5";
+      };
+      TSKeywordFunc = { 
+        fg = (elemAt base16 5);
+        ctermfg = "5";
+      };
+      TSProperty = { 
+        fg = (elemAt base16 3);
+        ctermfg = "3";
+      };
+      TSType = { 
+        fg = (elemAt base16 6);
+        ctermfg = "6";
+      };
+      TSVariable = { 
+        fg = (elemAt base16 5);
+        ctermfg = "5";
+      };
+      TSPunctBracket = { 
+        fg = (elemAt base16 15);
+        ctermfg = "15";
+      };
 
-    # Nix specific
-    nixStringDelimiter.fg = (elemAt base16 3);
-    nixNamespacedBuiltin.fg = (elemAt base16 5);
-  } (theme.nvimColors or {});
+      # Lua specific
+      luaBraces = { 
+        fg = (elemAt base16 15);
+        ctermfg = "15";
+      };
+      luaFuncCall = { 
+        fg = (elemAt base16 7);
+        ctermfg = "7";
+      };
+
+      # Nix specific
+      nixStringDelimiter = { 
+        fg = (elemAt base16 3);
+        ctermfg = "3";
+      };
+      nixNamespacedBuiltin = { 
+        fg = (elemAt base16 5);
+        ctermfg = "5";
+      };
+    } (theme.nvimColors or {});
+
+  swayColors = lib.attrsets.recursiveUpdate {
+    background = colors.background.normal;
+    borders = colors.foreground.normal;
+
+    window = {
+      focused = {
+        border = colors.foreground.normal;
+        background = colors.background.normal;
+        childBorder = colors.foreground.normal;
+        text = colors.background.normal;
+        indicator = colors.foreground.normal;
+      };
+      focusedInactive = {
+        border = colors.background.normal;
+        background = colors.foreground.bright;
+        childBorder = colors.background.normal;
+        text = colors.foreground.normal;
+        indicator = colors.red.normal;
+      };
+      unfocused = {
+        border = colors.background.normal;
+        background = colors.foreground.bright;
+        childBorder = colors.background.normal;
+        text = colors.foreground.normal;
+        indicator = colors.red.normal;
+      };
+      urgent = {
+        border = colors.red.normal;
+        background = colors.red.normal;
+        childBorder = colors.red.normal;
+        text = colors.foreground.normal;
+        indicator = colors.red.normal;
+      };
+    };
+  } (theme.swayColors or {});
 }
