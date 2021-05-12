@@ -6,6 +6,7 @@ with pkgs.vimPlugins; {
     set foldmethod=expr
     set foldexpr=nvim_treesitter#foldexpr()
   '' + luaConfig ''
+    ## Syntax: bash
     require'nvim-treesitter.configs'.setup {
       highlight = {
         enable = true,

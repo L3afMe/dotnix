@@ -7,7 +7,10 @@
 #      Nix config
 
 { inputs, system, nixpkgs, ... }:
-{
+let
+  user = import ./config.nix { pkgs = nixpkgs; };
+in
+rec {
   autoOptimiseStore = true;
 
   binaryCaches = [
@@ -24,9 +27,11 @@
     experimental-features = nix-command flakes
   '';
 
-  nixPath = [
-    "nixpkgs=${nixpkgs}"
+  nixPath = let path = toString ../.; in [
+    "repl=${path}/repl.nix"
     "home-manager=${inputs.home}"
+    "nixpkgs=${nixpkgs}"
+    "nixos-config=${path}"
   ];
 
   registry = {
@@ -37,4 +42,7 @@
   };
 
   package = nixpkgs.legacyPackages."${system}".nixFlakes;
+
+  trustedBinaryCaches = binaryCaches;
+  trustedUsers = [ "root" user.name ];
 }

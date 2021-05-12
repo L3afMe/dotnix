@@ -10,7 +10,7 @@
 { pkgs, ... }:
 let
   user = import ../config.nix { inherit pkgs; };
-  getBin = (import ../config.nix { lib = pkgs.lib; }).getBin;
+  getBin = (import ../helpers.nix { lib = pkgs.lib; }).getBin;
 in 
 rec {
   configOptions = {

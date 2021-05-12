@@ -6,7 +6,16 @@ nixpkgs.lib.nixosSystem rec {
   system = "x86_64-linux";
 
   modules = [
+    home.nixosModules.home-manager
+    nixpkgs.nixosModules.notDetected
+
     {
+      home-manager = {
+        useGlobalPkgs = true;
+        useUserPackages = true;
+        users."${config.user.name}" = import ./home-manager;
+      };
+
       nix = config.nix { inherit inputs system nixpkgs; };
 
       nixpkgs = 
@@ -36,16 +45,6 @@ nixpkgs.lib.nixosSystem rec {
     }
 
     ./system
-
-    home.nixosModules.home-manager {
-      home-manager = {
-        useGlobalPkgs = true;
-        useUserPackages = true;
-        users."${config.user.name}" = import ./home-manager;
-      };
-    }
-
-    nixpkgs.nixosModules.notDetected
   ];
 
   specialArgs = { inherit inputs; };

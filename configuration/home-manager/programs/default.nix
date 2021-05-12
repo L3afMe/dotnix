@@ -1,4 +1,5 @@
 [
+  ./bash
   ./git.nix
   ./kitty
   ./neovim

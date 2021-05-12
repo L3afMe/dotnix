@@ -1,5 +1,8 @@
 { pkgs, conf, lib }:
 with conf.programs.neovim;
+let
+  queries = import ./queries.nix;
+in
 {
   # CoC setting generated from configOptions.cocSettings
   neovimCocSettings = import ./coc-settings.nix { inherit pkgs conf; };
@@ -10,4 +13,6 @@ with conf.programs.neovim;
       (import ./colorscheme.nix { inherit conf lib; });
 
   # Treesitter scm's
+  nixHighlights = queries.nixHighlights;
+  nixInjections = queries.nixInjections;
 }

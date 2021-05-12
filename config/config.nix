@@ -59,6 +59,13 @@ rec {
       pkg = pkgs.wofi;
       args = [ "--show" "run" ];
     };
+
+    ## Configured Shells
+    # Bash
+    # Zsh     (TODO)
+    # Elvish  (TODO)
+    # Hilbish (TODO)
+    shell = pkgs.bash;
   };
 
   # Only set this if using an X11 window manager
