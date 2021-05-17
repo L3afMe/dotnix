@@ -24,11 +24,13 @@ in
 
       ; Bash strings
       ((indented_string) @bash @_code
-        (#lua-match? @_code "\s*## Syntax: bash"))
+        (#lua-match? @_code "\s*#> Syntax: bash"))
+      ((indented_string) @bash @_code
+        (#lua-match? @_code "\s*#> Syntax: sh"))
 
-      ; Lua strings
-      ((indented_string) @lua @_code
-        (#lua-match? @_code "\s*\\-\- Syntax: lua"))
+      ; XML strings
+      ((indented_string) @html @_code
+        (#lua-match? @_code "\s*> Syntax: XML <"))
     '';
   };
 }

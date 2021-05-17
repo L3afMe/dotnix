@@ -31,7 +31,12 @@ rec {
     # neovim-nightly
     # kakoune (TODO)
     # emacs   (TODO)
-    editor = pkgs.neovim-nightly;
+    editor = {
+      pkg = pkgs.neovim-nightly;
+      # Override bin name because it's set
+      # to "neovim-nightly" by default
+      binName = "nvim";
+    };
 
     ## Configured Terminals
     # kitty

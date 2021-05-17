@@ -30,7 +30,7 @@ in
   vimtex
 
   # Lua
-  pkgs.new-vim-shit.vimPlugins.vim-lua
+  vim-lua
 
   # Nix
   vim-nix
@@ -47,7 +47,7 @@ in
   webapi-vim
 
   # Smali
-  pkgs.new-vim-shit.vimPlugins.vim-smali
+  vim-smali
 
   # TOML
   vim-toml
@@ -94,7 +94,7 @@ in
   vim-signify
 
   # Diff view
-  pkgs.new-vim-shit.vimPlugins.diffview-nvim
+  diffview-nvim
 
   ### Misc
   # More text objects

@@ -8,10 +8,11 @@ in
     wayland.windowManager.sway = import ./config.nix { inherit pkgs conf lib; };
 
     home.packages = with pkgs; [
-      swaylock-fancy
-      swayidle
+      sway-contrib.grimshot
+      swaybg
       wl-clipboard
       mako
+      waybar
       wofi
     ];
   };

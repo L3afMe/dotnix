@@ -20,22 +20,16 @@ nixpkgs.lib.nixosSystem rec {
 
       nixpkgs = 
         let
-          inputs-overlays = _: _: {
-            comma = import inputs.comma { pkgs = nixpkgs.legacyPackages."${system}"; };
-          };
-
           nixpkgs-overlays = _: _: with inputs; {
             master = import master { inherit config system; };
             unstable = import unstable { inherit config system; };
             stable = import stable { inherit config system; };
             staging = import staging { inherit config system; };
             staging-next = import staging-next { inherit config system; };
-            new-vim-shit = import new-vim-shit { inherit config system; };
           };
         in
         {
           overlays = with inputs; [
-            inputs-overlays
             nixpkgs-overlays
 
             rust.overlay

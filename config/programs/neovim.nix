@@ -27,7 +27,7 @@ rec {
 
       languageserver = {
         nix = {
-          command = "rnix-lsp";
+          command = "~/Projects/Nix/nix-eval-lsp/result/bin/nix-eval-lsp";
 
           filetypes = [
             "nix"

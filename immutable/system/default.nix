@@ -2,12 +2,13 @@
 let
   config = import ../../config { inherit pkgs; };
   termBase16 = map (builtins.replaceStrings [ "#" ] [ "" ])
-    config.theme.base16;
+    config.theme.ttyBase16;
+
+  getBin = config.helpers.getBin;
 in
 {
   imports = [
     ./hardware-configuration.nix
-    ./udev.nix
   ];
 
   # MBR dualboot
@@ -60,6 +61,32 @@ in
   programs = {
     xwayland.enable = true;
     command-not-found.enable = false;
+
+    cowsay = {
+      enable = true;
+      
+      cows = {
+        giraffe = ''
+    $thoughts
+      $thoughts
+        $thoughts
+              ^__^
+              (oo)
+              (__)\\
+                \\ \\
+                  \\ \\
+                  \\ \\
+                    \\ \\
+                    \\ \\
+                      \\ \\
+                      \\ \\
+                        \\ \\______
+                        \\       )\\/\\/\\
+                          ||-----|
+                          ||    ||
+        '';
+      };
+    };
   };
 
   services.xserver =
@@ -104,6 +131,8 @@ in
       enable = true;
       driSupport = true;
     };
+
+    #zsa.enable = true;
   };
 
   users.users."${config.user.name}" = {
@@ -121,13 +150,10 @@ in
     binsh = "${pkgs.dash}/bin/dash";
 
     systemPackages = with pkgs; [
-      bat
       curl
       dash
-      fd
       file
       gcc
-      ripgrep
       unzip
       zip
     ] ++ config.user.systemPackages;
@@ -148,6 +174,15 @@ in
     fontconfig = {
       enable = true;
       dpi = 96;
+    };
+  };
+
+  system.userActivationScripts = {
+    batRebuildCache = {
+      text = ''
+        ${getBin pkgs.bat} cache --build
+      '';
+      deps = [ ];
     };
   };
 

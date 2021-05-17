@@ -6,6 +6,11 @@ rec {
   let
     pkg = getPkg program;
 
+    binName =
+      if builtins.hasAttr "pkg" program
+      then program.binName or (getBinName program.pkg)
+      else (getBinName pkg);
+
     # This is way more complicated that in needs to be
     args = with lib.lists;
       let
@@ -15,7 +20,7 @@ rec {
           then program.args or []
           else [];
 
-        # Flatten will turn "arg" into [ "arg" ]
+        # Flatten will turn "" into [ "arg" ]
         argsList = flatten args;
 
         # Ensure all args are strings
@@ -26,8 +31,12 @@ rec {
         then " ${builtins.concatStringsSep " " args}"
         else "";
   in
-  "${getPkgBin pkg}${args}";
+    "${pkg}/bin/${binName}${args}";
+
+  getBinName = pkg:
+    pkg.meta.mainProgram or pkg.pname;
 
   getPkgBin = pkg:
-    "${pkg}/bin/${pkg.meta.mainProgram or pkg.pname}";
+    "${pkg}/bin/${getBinName pkg}";
 }
+

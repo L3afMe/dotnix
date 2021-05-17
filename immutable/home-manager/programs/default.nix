@@ -6,4 +6,6 @@
   ./sway
   ./vieb
   ./wezterm
+
+  ./misc
 ]

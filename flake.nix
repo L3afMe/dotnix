@@ -12,7 +12,7 @@
     neovim-nightly.url = "github:nix-community/neovim-nightly-overlay";
     rust.url = "github:oxalica/rust-overlay";
 
-    master.url = "github:nixos/nixpkgs/master";
+    master.url = "/home/l3af/Projects/Nix/nixpkgs/";
     stable.url = "github:nixos/nixpkgs/release-20.09";
     staging.url = "github:nixos/nixpkgs/staging";
     staging-next.url = "github:nixos/nixpkgs/staging-next";
@@ -23,7 +23,7 @@
   outputs = { self, home, nixpkgs, ... } @ inputs:
     with nixpkgs.lib;
     {
-      nixosConfigurations.l3af = import ./configuration {
+      nixosConfigurations.l3af = import ./immutable {
         inherit home inputs nixpkgs;
       };
 
